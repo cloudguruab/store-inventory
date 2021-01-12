@@ -109,7 +109,7 @@ def add():
         price = input('Price of the product: ').strip()
         print('-'*35)
         try:
-            str(float(price))
+            (float(price)*100)
             break
         except ValueError:
             print("Try again, format: (0.00)")
@@ -127,29 +127,29 @@ def add():
 
     now = datetime.datetime.today
     updated = now().strftime("%m/%d/%Y")
-    print(('\n'+name+','+quantity+','+price+','+updated))
+    print(('\n'+name+','+price+','+quantity+','+updated))
     print()
     if input('Save Entry? [Yn]').lower() != 'n':
         with open('inventory.csv', 'a') as file: 
-            file.write('\n'+name+','+quantity+','+price+','+updated)
+            file.write('\n'+name+','+price+','+quantity+','+updated)
         print('-'*35)
         print('Saved successfully!')
         print('-'*35)
         upload_db()
 
 
-def view(search_query=None):
+def search(search_query=None):
     """View items in inventory."""
     products = Product.select().order_by(Product.product_id.asc())
     if search_query:
-        products = products.where(Product.product_name.contains(search_query))
-
+        products = products.where(Product.product_id.contains(search_query))
+    
     for product in products:
         timestamp = product.date_updated
         clear()
         print(timestamp) 
         print('='*len(timestamp))
-        print(product.product_id, product.product_name)
+        print(product.product_id, product.product_name, '| price:', '$'+str(product.product_price*.01), '| quantity:', product.product_quantity)
         print('='*len(timestamp))
         print()
         print('n) next entry')
@@ -174,15 +174,14 @@ def backup():
     select.to_csv('database.csv', index=False)
     
 
-def search():
-    '''Search entries for a str.'''
-    view(input('Search: '))
+def view():
+    '''Search entries in database.'''
+    search(input('Search: '))
 
 menu = OrderedDict([
     ('a', add),
     ('v', view),
     ('b', backup),
-    ('s', search)
 ])
 
 if __name__ == "__main__":
