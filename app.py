@@ -33,8 +33,8 @@ def upload_db():
             try:
                 Product.create(
                     product_name=row['product_name'],
-                    product_price=row['product_quantity'],
-                    product_quantity=row['product_price'],
+                    product_price=row['product_price'],
+                    product_quantity=row['product_quantity'],
                     date_updated=row['date_updated']
                 )
             except IntegrityError: 
