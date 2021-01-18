@@ -108,8 +108,9 @@ def add():
     while True:
         price = input('Price of the product: ').strip()
         print('-'*35)
+        
         try:
-            (float(price)*100)
+            price = int(float(price)*100)
             break
         except ValueError:
             print("Try again, format: (0.00)")
@@ -124,9 +125,10 @@ def add():
         except ValueError:
             print("Please enter a integer.")
             continue
-
+    
     now = datetime.datetime.today
     updated = now().strftime("%m/%d/%Y")
+    price = str(price)
     print(('\n'+name+','+price+','+quantity+','+updated))
     print()
     if input('Save Entry? [Yn]').lower() != 'n':
